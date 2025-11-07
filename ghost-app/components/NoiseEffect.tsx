@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { animate } from 'motion';
+import { useReducedMotion } from '@/lib/hooks/use-reduced-motion';
 
 interface NoiseEffectProps {
   onComplete: () => void;
@@ -12,11 +13,20 @@ export default function NoiseEffect({ onComplete, duration = 2000 }: NoiseEffect
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number | undefined>(undefined);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const container = containerRef.current;
     if (!canvas || !container) return;
+
+    // アニメーション削減が有効な場合は即座に完了
+    if (prefersReducedMotion) {
+      const timer = setTimeout(() => {
+        onComplete();
+      }, 100); // 最小限の遅延
+      return () => clearTimeout(timer);
+    }
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -74,18 +84,25 @@ export default function NoiseEffect({ onComplete, duration = 2000 }: NoiseEffect
       clearTimeout(timer);
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [onComplete, duration]);
+  }, [onComplete, duration, prefersReducedMotion]);
 
   return (
     <div
       ref={containerRef}
       className="fixed inset-0 z-50 bg-black"
+      role="presentation"
+      aria-live="polite"
+      aria-label="アプリケーション起動中"
     >
       <canvas
         ref={canvasRef}
         className="w-full h-full"
-        aria-label="ノイズエフェクト"
+        aria-hidden="true"
       />
+      {/* スクリーンリーダー用のテキスト */}
+      <div className="sr-only">
+        アプリケーションを起動しています。しばらくお待ちください。
+      </div>
     </div>
   );
 }

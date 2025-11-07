@@ -46,12 +46,19 @@ function ChatPageContent() {
   }, [searchParams]);
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-purple-950 via-black to-orange-950">
+    <div 
+      className="relative min-h-screen bg-gradient-to-br from-purple-950 via-black to-orange-950"
+      lang="ja"
+    >
       {/* エラー表示 */}
       {error && (
-        <div className="flex items-center justify-center min-h-screen p-4">
+        <div 
+          className="flex items-center justify-center min-h-screen p-4"
+          role="alert"
+          aria-live="assertive"
+        >
           <div className="bg-red-500/20 border-2 border-red-500 rounded-lg px-6 py-4 text-white max-w-md">
-            <p className="font-bold mb-2">エラー</p>
+            <h2 className="font-bold mb-2">エラー</h2>
             <p>{error}</p>
           </div>
         </div>
@@ -73,7 +80,12 @@ function ChatPageContent() {
 export default function ChatPage() {
   return (
     <Suspense fallback={
-      <div className="relative min-h-screen bg-gradient-to-br from-purple-950 via-black to-orange-950 flex items-center justify-center">
+      <div 
+        className="relative min-h-screen bg-gradient-to-br from-purple-950 via-black to-orange-950 flex items-center justify-center"
+        role="status"
+        aria-live="polite"
+        aria-label="ページを読み込み中"
+      >
         <div className="text-white text-xl animate-pulse">読み込み中...</div>
       </div>
     }>

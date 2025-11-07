@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { animate } from 'motion';
+import { useReducedMotion } from '@/lib/hooks/use-reduced-motion';
 import type { Persona } from '@/lib/personas/types';
 
 interface SpeechBubbleProps {
@@ -20,25 +21,32 @@ export function SpeechBubble({
   const bubbleRef = useRef<HTMLDivElement>(null);
   const [displayedText, setDisplayedText] = useState('');
   const [isTypingComplete, setIsTypingComplete] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   // ポップアップアニメーション
   // 要件: 吹き出しアニメーションのタイミング最適化
   useEffect(() => {
     if (bubbleRef.current) {
-      animate(
-        bubbleRef.current,
-        { 
-          opacity: [0, 1],
-          scale: [0.8, 1.05, 1],
-          y: [20, -5, 0]
-        },
-        { 
-          duration: 0.3,
-          easing: [0.34, 1.56, 0.64, 1] // easeOutBack風のイージング
-        }
-      );
+      if (prefersReducedMotion) {
+        // アニメーション削減モードでは即座に表示
+        bubbleRef.current.style.opacity = '1';
+        bubbleRef.current.style.transform = 'translate(-50%, -50%) scale(1)';
+      } else {
+        animate(
+          bubbleRef.current,
+          { 
+            opacity: [0, 1],
+            scale: [0.8, 1.05, 1],
+            y: [20, -5, 0]
+          },
+          { 
+            duration: 0.3,
+            easing: [0.34, 1.56, 0.64, 1] // easeOutBack風のイージング
+          }
+        );
+      }
     }
-  }, []);
+  }, [prefersReducedMotion]);
 
   // タイピングエフェクト
   useEffect(() => {
@@ -47,6 +55,16 @@ export function SpeechBubble({
     let currentIndex = 0;
     setDisplayedText('');
     setIsTypingComplete(false);
+
+    // アニメーション削減モードでは即座に全文表示
+    if (prefersReducedMotion) {
+      setDisplayedText(message);
+      setIsTypingComplete(true);
+      if (onComplete) {
+        onComplete();
+      }
+      return;
+    }
 
     // タイピング速度（ミリ秒）
     // 要件: 自然な会話の流れを実現するため、適度な速度に調整
@@ -68,7 +86,7 @@ export function SpeechBubble({
     }, typingSpeed);
 
     return () => clearInterval(typingInterval);
-  }, [message, onComplete]);
+  }, [message, onComplete, prefersReducedMotion]);
 
   return (
     <div
@@ -80,6 +98,9 @@ export function SpeechBubble({
         transform: 'translate(-50%, -50%)',
         opacity: 0
       }}
+      role="article"
+      aria-label={`${persona.name}の発言`}
+      aria-live="polite"
     >
       <div
         className="relative max-w-xs sm:max-w-sm md:max-w-md px-4 py-3 rounded-2xl shadow-lg backdrop-blur-sm"
@@ -112,13 +133,15 @@ export function SpeechBubble({
         <p 
           className="text-sm sm:text-base leading-relaxed"
           style={{ color: persona.visualStyle.color }}
+          aria-label={message}
         >
           {displayedText}
           {/* タイピング中のカーソル */}
-          {!isTypingComplete && (
+          {!isTypingComplete && !prefersReducedMotion && (
             <span 
               className="inline-block w-0.5 h-4 ml-1 animate-pulse"
               style={{ backgroundColor: persona.visualStyle.color }}
+              aria-hidden="true"
             />
           )}
         </p>

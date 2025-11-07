@@ -45,7 +45,10 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-purple-950 via-black to-orange-950">
+    <div 
+      className="relative min-h-screen bg-gradient-to-br from-purple-950 via-black to-orange-950"
+      lang="ja"
+    >
       {/* ノイズエフェクト（起動演出） */}
       {showNoise && <NoiseEffect onComplete={handleNoiseComplete} />}
       

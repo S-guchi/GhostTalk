@@ -208,18 +208,24 @@ export function ChatStage({ personas, situation }: ChatStageProps) {
     : null;
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div 
+      className="relative w-full h-screen overflow-hidden"
+      role="main"
+      aria-label="ゴーストチャット会話画面"
+    >
       {/* キャラクターを配置 */}
       {/* 要件: 各0.3秒間隔で順次登場 */}
-      {personas.map((persona, index) => (
-        <GhostCharacter
-          key={persona.id}
-          persona={persona}
-          position={characterPositions[index]}
-          isActive={activePersonaId === persona.id}
-          delay={index * 300} // 0.3秒間隔
-        />
-      ))}
+      <div role="group" aria-label="お化けキャラクター">
+        {personas.map((persona, index) => (
+          <GhostCharacter
+            key={persona.id}
+            persona={persona}
+            position={characterPositions[index]}
+            isActive={activePersonaId === persona.id}
+            delay={index * 300} // 0.3秒間隔
+          />
+        ))}
+      </div>
 
       {/* 現在のメッセージの吹き出しを表示 */}
       {currentMessage && currentPersona && (
@@ -235,12 +241,17 @@ export function ChatStage({ personas, situation }: ChatStageProps) {
 
       {/* ローディング表示 */}
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div 
+          className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          role="status"
+          aria-live="polite"
+          aria-label="会話を生成中"
+        >
           <div className="bg-purple-900/80 border-2 border-purple-500 rounded-lg px-8 py-6 text-center">
             <div className="text-white text-xl mb-4 animate-pulse">
               会話を生成中...
             </div>
-            <div className="flex justify-center space-x-2">
+            <div className="flex justify-center space-x-2" aria-hidden="true">
               <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
               <div className="w-3 h-3 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
               <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -251,16 +262,21 @@ export function ChatStage({ personas, situation }: ChatStageProps) {
 
       {/* エラー表示 */}
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+        <div 
+          className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          role="alert"
+          aria-live="assertive"
+        >
           <div className="bg-red-900/80 border-2 border-red-500 rounded-lg px-8 py-6 text-white max-w-md">
             <div className="flex items-center mb-4">
-              <span className="text-3xl mr-3">⚠️</span>
-              <p className="font-bold text-xl">エラー</p>
+              <span className="text-3xl mr-3" aria-hidden="true">⚠️</span>
+              <h2 className="font-bold text-xl">エラー</h2>
             </div>
             <p className="mb-4">{error}</p>
             <button
               onClick={() => window.location.reload()}
-              className="w-full py-2 px-4 bg-red-600 hover:bg-red-700 rounded-lg font-bold transition-colors"
+              className="w-full py-2 px-4 bg-red-600 hover:bg-red-700 rounded-lg font-bold transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-red-900"
+              aria-label="ページを再読み込みしてもう一度試す"
             >
               もう一度試す
             </button>
