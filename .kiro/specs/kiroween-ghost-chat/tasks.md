@@ -86,7 +86,7 @@
     - エラーメッセージ表示機能を追加
     - _Requirements: 2.3, 2.4, 2.5_
 
-- [ ] 8. LanguageSwitcherコンポーネントの実装
+- [x] 8. LanguageSwitcherコンポーネントの実装
   - `components/LanguageSwitcher.tsx`を作成
   - next-intlのuseRouterを使用してロケール切り替えを実装
   - 日本語/英語のトグルボタンを配置
