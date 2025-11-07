@@ -105,7 +105,7 @@
     - 選択されたペルソナIDとシチュエーションをクエリパラメータまたは状態で渡す
     - _Requirements: 2.4, 3.1, 4.1_
 
-- [ ] 10. GhostCharacterコンポーネントの実装
+- [x] 10. GhostCharacterコンポーネントの実装
   - `components/GhostCharacter.tsx`を作成
   - Next.js Imageコンポーネントでキャラクター画像を表示
   - Motionで登場アニメーション（スケール + フェードイン）を実装
