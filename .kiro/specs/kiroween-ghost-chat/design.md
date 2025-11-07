@@ -2,7 +2,7 @@
 
 ## Overview
 
-Kiroween Ghost Chatは、Next.js 16（App Router）とVercel AI SDKを使用したインタラクティブなハロウィンアプリケーションです。ユーザーが入力したシチュエーションに基づいて、複数のお化けキャラクター（スケルトン、カボチャ、魔女など）がAIによって生成された会話を自動的に展開します。ユーザーは画面上に現れるお化けたちの会話を眺めて楽しむことができます。日本語と英語の切り替えに対応しています。
+Kiroween Ghost Chatは、Next.js 16（App Router）とVercel AI SDKを使用したインタラクティブなハロウィンアプリケーションです。ユーザーが入力したシチュエーションに基づいて、複数のお化けキャラクター（スケルトン、カボチャ、魔女など）がAIによって生成された会話を自動的に展開します。ユーザーは画面上に現れるお化けたちの会話を眺めて楽しむことができます。
 
 ### Technology Stack
 
@@ -11,7 +11,6 @@ Kiroween Ghost Chatは、Next.js 16（App Router）とVercel AI SDKを使用し�
 - **Styling**: Tailwind CSS 4
 - **Animation**: Motion 10.16.0 (formerly Framer Motion)
 - **Language**: TypeScript 5 (strict mode)
-- **Internationalization**: next-intl (^3.26.5)
 - **Code Quality**: Biome 2.2.0 (linter and formatter)
 - **Runtime**: Node.js 20+
 
@@ -36,20 +35,18 @@ graph TB
 
 ```
 app/
-├── [locale]/
-│   ├── page.tsx              # メインページ（起動演出 + 入力UI）
-│   └── chat/
-│       └── page.tsx          # チャット画面
-├── api/
-│   └── ghost-chat/
-│       └── route.ts          # AI会話生成APIエンドポイント
+├── page.tsx                  # メインページ（起動演出 + 入力UI）
+├── chat/
+│   └── page.tsx              # チャット画面
+└── api/
+    └── ghost-chat/
+        └── route.ts          # AI会話生成APIエンドポイント
 components/
 ├── NoiseEffect.tsx           # ノイズエフェクト
 ├── InputWindow.tsx           # シチュエーション入力UI
 ├── GhostCharacter.tsx        # お化けキャラクター表示
 ├── SpeechBubble.tsx          # 吹き出し表示
-├── ChatStage.tsx             # チャット全体のステージ
-└── LanguageSwitcher.tsx      # 言語切り替えボタン
+└── ChatStage.tsx             # チャット全体のステージ
 lib/
 ├── personas/
 │   ├── skeleton.ts           # スケルトンのペルソナ
@@ -58,14 +55,8 @@ lib/
 │   ├── ghost.ts              # ゴーストのペルソナ（追加例）
 │   ├── vampire.ts            # ヴァンパイアのペルソナ（追加例）
 │   └── index.ts              # ペルソナマネージャー（全ペルソナ登録・ランダム選択）
-├── ai/
-│   └── chat-generator.ts     # AI会話生成ロジック
-└── i18n/
-    ├── config.ts             # i18n設定
-    └── request.ts            # リクエストごとのロケール取得
-messages/
-├── ja.json                   # 日本語翻訳
-└── en.json                   # 英語翻訳
+└── ai/
+    └── chat-generator.ts     # AI会話生成ロジック
 public/
 └── characters/
     ├── skeleton.svg          # スケルトン画像
@@ -91,21 +82,6 @@ interface NoiseEffectProps {
 **実装方針:**
 - Canvas APIまたはCSS animationを使用してノイズエフェクトを実現
 - 指定された時間後にonCompleteコールバックを実行
-
-### 1.5. LanguageSwitcher Component
-
-言語切り替えボタンを表示するコンポーネント。
-
-```typescript
-interface LanguageSwitcherProps {
-  currentLocale: 'ja' | 'en';
-}
-```
-
-**実装方針:**
-- next-intlのuseRouterを使用してロケール切り替え
-- 日本語/英語のトグルボタン
-- 画面右上に固定配置
 
 ### 2. InputWindow Component
 
@@ -191,7 +167,6 @@ interface Persona {
   description: string;
   personality: string[];
   speakingStyle: string;
-  speakingStyleEn?: string; // 英語用の話し方
   visualStyle: {
     color: string;
     icon: string;
@@ -218,7 +193,6 @@ interface ConversationContext {
   situation: string;
   messages: ChatMessage[];
   selectedPersonas: Persona[];
-  locale: 'ja' | 'en';
 }
 ```
 
@@ -254,16 +228,16 @@ AI SDKを使用して、複数のお化けキャラクター間の会話を生�
 ```typescript
 // app/api/ghost-chat/route.ts
 export async function POST(req: Request) {
-  const { situation, personaIds, locale } = await req.json();
+  const { situation, personaIds } = await req.json();
   
   // ペルソナIDから実際のペルソナオブジェクトを取得
   const personas = personaIds.map(id => getPersonaById(id)).filter(Boolean);
   
   // ペルソナ情報を取得
-  const personaPrompts = personas.map(p => getPersonaPrompt(p, locale));
+  const personaPrompts = personas.map(p => getPersonaPrompt(p));
   
-  // システムプロンプト構築（言語に応じて）
-  const systemPrompt = buildSystemPrompt(situation, personaPrompts, locale);
+  // システムプロンプト構築
+  const systemPrompt = buildSystemPrompt(situation, personaPrompts);
   
   // AI SDK でストリーミング生成
   const result = await streamText({
@@ -336,7 +310,6 @@ export const skeletonPersona: Persona = {
     '骨に関するダジャレを言いがち'
   ],
   speakingStyle: '軽快で親しみやすい口調。「〜だぜ」「〜じゃん」などのカジュアルな語尾',
-  speakingStyleEn: 'Casual and friendly tone. Uses contractions and informal language like "gonna", "wanna"',
   visualStyle: {
     color: '#E8E8E8',
     icon: '💀',
@@ -362,7 +335,6 @@ export const pumpkinPersona: Persona = {
     '少しおっちょこちょい'
   ],
   speakingStyle: '元気で明るい口調。「〜だよ！」「わぁ！」などの感嘆詞が多い',
-  speakingStyleEn: 'Energetic and cheerful tone. Uses lots of exclamations like "Wow!", "Yay!"',
   visualStyle: {
     color: '#FF8C00',
     icon: '🎃',
@@ -386,7 +358,6 @@ export const witchPersona: Persona = {
     '時々意地悪な冗談を言う'
   ],
   speakingStyle: '丁寧だが少し古風な口調。「〜ですわ」「〜ですもの」などの語尾',
-  speakingStyleEn: 'Polite but slightly archaic tone. Uses formal language with a mysterious flair',
   visualStyle: {
     color: '#8B4789',
     icon: '🧙‍♀️',
@@ -499,63 +470,6 @@ try {
 - スクリーンリーダー対応（ARIA属性）
 - 十分なコントラスト比
 - アニメーションの無効化オプション（prefers-reduced-motion）
-
-
-## Internationalization (i18n)
-
-### Configuration
-
-next-intlを使用して日本語と英語の切り替えを実装します。
-
-```typescript
-// lib/i18n/config.ts
-export const locales = ['ja', 'en'] as const;
-export const defaultLocale = 'ja' as const;
-export type Locale = (typeof locales)[number];
-```
-
-### Translation Files
-
-```json
-// messages/ja.json
-{
-  "home": {
-    "inputPlaceholder": "シチュエーションを入力してください...",
-    "submitButton": "お化けを呼ぶ",
-    "maxLength": "最大500文字"
-  },
-  "errors": {
-    "generationFailed": "お化けたちが現れませんでした。もう一度お試しください。",
-    "emptyInput": "シチュエーションを入力してください"
-  }
-}
-
-// messages/en.json
-{
-  "home": {
-    "inputPlaceholder": "Enter a situation...",
-    "submitButton": "Summon Ghosts",
-    "maxLength": "Max 500 characters"
-  },
-  "errors": {
-    "generationFailed": "Failed to summon ghosts. Please try again.",
-    "emptyInput": "Please enter a situation"
-  }
-}
-```
-
-### Routing
-
-Next.js 16のApp Routerで`[locale]`動的セグメントを使用：
-- `/ja` - 日本語
-- `/en` - 英語
-- `/` - デフォルトロケール（日本語）にリダイレクト
-
-### AI Prompt Localization
-
-AI生成時にロケールに応じてシステムプロンプトと話し方を切り替え：
-- 日本語: 各ペルソナの`speakingStyle`を使用
-- 英語: 各ペルソナの`speakingStyleEn`を使用
 
 
 ## Character Assets

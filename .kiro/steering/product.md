@@ -1,20 +1,31 @@
+---
+inclusion: always
+---
+
 # Product Overview
 
-Ghost Chat is an interactive Halloween-themed web application where users input a situation and watch multiple ghost characters (skeleton, pumpkin, witch, etc.) automatically engage in AI-generated conversations based on that scenario.
+Ghost Chat is a Halloween-themed web app where users input a scenario and watch AI-powered ghost characters (skeleton, pumpkin, witch) engage in automatic conversations based on that situation.
 
-## Key Features
+## Core Features
 
-- Immersive startup experience with noise effects
-- User-driven scenario input (max 500 characters)
+- Noise effect startup animation (≤2 seconds)
+- Scenario input (max 500 characters)
 - Multiple ghost characters with distinct personas
-- AI-generated conversations using character-specific personality documents
-- Animated speech bubbles displaying character dialogue
-- Bilingual support (Japanese default, English available)
+- AI-generated streaming conversations using Vercel AI SDK
+- Animated speech bubbles with character dialogue
+- Japanese language interface
 
-## User Experience Flow
+## User Flow
 
-1. App launches with noise effect (≤2 seconds)
+1. Noise effect on app launch
 2. Input window fades in
-3. User enters a situation/scenario
-4. 3+ ghost characters appear with animations
-5. Characters engage in automatic conversation based on the scenario and their personas
+3. User enters scenario
+4. Ghost characters appear with animations
+5. Characters converse automatically based on scenario and personas
+
+## Character System
+
+- Each character has a unique persona defined in `/lib/personas`
+- Character images stored as SVGs in `/public/characters`
+- Persona documents guide AI conversation generation
+- Characters: pumpkin, skeleton, witch

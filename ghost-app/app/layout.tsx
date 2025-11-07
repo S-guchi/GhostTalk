@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ghost Chat",
-  description: "Chat with Halloween ghosts",
+  title: "ゴーストチャット",
+  description: "ハロウィンのお化けたちとチャット",
 };
 
 export default function RootLayout({

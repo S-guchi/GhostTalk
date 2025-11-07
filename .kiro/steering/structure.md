@@ -1,53 +1,52 @@
+---
+inclusion: always
+---
+
 # Project Structure
 
-## Root Organization
+## Directory Layout
 
 ```
 ghost-app/
-├── app/                    # Next.js App Router
-│   ├── [locale]/          # Locale-based routing (ja, en)
-│   │   ├── layout.tsx     # Root layout with i18n provider
-│   │   └── page.tsx       # Home page
-│   ├── globals.css        # Global styles
-│   └── favicon.ico
-├── components/            # React components
-├── lib/                   # Utility functions and shared logic
-├── i18n/                  # Internationalization configuration
-│   ├── config.ts          # Locale definitions (ja default, en)
-│   └── request.ts         # i18n request handling
-├── messages/              # Translation files
-│   ├── en.json
-│   └── ja.json
-├── public/                # Static assets
-│   └── characters/        # Character images/assets
-└── middleware.ts          # Next.js middleware (likely i18n routing)
+├── app/                      # Next.js App Router
+│   ├── chat/                # Chat page
+│   ├── api/                 # API routes
+│   │   └── ghost-chat/      # Chat API endpoint
+│   ├── globals.css          # Global styles
+│   ├── layout.tsx           # Root layout
+│   └── page.tsx             # Home page
+├── components/              # Reusable React components
+├── lib/                     # Utilities and shared logic
+│   ├── ai/                  # AI integration (chat-generator)
+│   └── personas/            # Character personas and types
+├── public/                  # Static assets
+│   └── characters/          # Character SVGs (pumpkin, skeleton, witch)
+└── docs/                    # Documentation
+    └── image-prompt/        # Character image prompts
 ```
 
 ## Key Conventions
 
+### File Organization
+
+- Server components by default (no `'use client'` unless needed)
+- Client components in `/components` when using hooks, events, or animations
+- Utilities and business logic in `/lib`
+- API routes in `/app/api`
+
 ### Routing
-- Locale-based routing via `[locale]` dynamic segment
-- Default locale: Japanese (ja)
-- Supported locales: ja, en
 
-### Internationalization
-- Use `useTranslations` hook from next-intl in client components
-- Use `getMessages` in server components
-- Translation keys organized by namespace (e.g., `common`, `home`, `errors`)
-- All user-facing text must be internationalized
+- Standard Next.js App Router structure
+- Use `await params` for async params in Next.js 15+
+- Default language: Japanese
 
-### Styling
-- Tailwind utility classes with dark mode support
-- CSS variables for fonts: `--font-geist-sans`, `--font-geist-mono`
-- Global styles in `app/globals.css`
+### Imports
 
-### TypeScript
-- Strict mode enabled
 - Use `@/` path alias for imports from project root
-- Async params in Next.js 15+ (e.g., `await params`)
+- Auto-organize imports with Biome
 
-### Component Organization
-- Server components by default (Next.js App Router)
-- Client components marked with `'use client'` directive
-- Shared components in `/components`
-- Utilities and helpers in `/lib`
+### Naming
+
+- Use kebab-case for file/folder names
+- PascalCase for component files (e.g., `ChatStage.tsx`)
+- camelCase for utility files (e.g., `chat-generator.ts`)
