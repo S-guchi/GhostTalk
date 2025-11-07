@@ -1,7 +1,7 @@
-import type { Persona } from './types';
-import { pumpkinPersona } from './pumpkin';
-import { skeletonPersona } from './skeleton';
-import { witchPersona } from './witch';
+import type { Persona } from "./types";
+import { pumpkinPersona } from "./pumpkin";
+import { skeletonPersona } from "./skeleton";
+import { witchPersona } from "./witch";
 
 /**
  * 全ペルソナのレジストリ
@@ -22,7 +22,7 @@ export const allPersonas: Persona[] = [
 export function selectRandomPersonas(count = 3): Persona[] {
   // 配列をシャッフル
   const shuffled = [...allPersonas].sort(() => Math.random() - 0.5);
-  
+
   // 指定数または利用可能な数の少ない方を返す
   return shuffled.slice(0, Math.min(count, allPersonas.length));
 }
@@ -37,7 +37,7 @@ export function getPersonaById(id: string): Persona | undefined {
 }
 
 // 型と個別のペルソナもエクスポート
-export type { Persona } from './types';
-export { pumpkinPersona } from './pumpkin';
-export { skeletonPersona } from './skeleton';
-export { witchPersona } from './witch';
+export type { Persona } from "./types";
+export { pumpkinPersona } from "./pumpkin";
+export { skeletonPersona } from "./skeleton";
+export { witchPersona } from "./witch";

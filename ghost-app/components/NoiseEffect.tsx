@@ -1,15 +1,18 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import { animate } from 'motion';
-import { useReducedMotion } from '@/lib/hooks/use-reduced-motion';
+import { useEffect, useRef } from "react";
+import { animate } from "motion";
+import { useReducedMotion } from "@/lib/hooks/use-reduced-motion";
 
 interface NoiseEffectProps {
   onComplete: () => void;
   duration?: number; // デフォルト: 2000ms（要件: 0-2秒）
 }
 
-export default function NoiseEffect({ onComplete, duration = 2000 }: NoiseEffectProps) {
+export default function NoiseEffect({
+  onComplete,
+  duration = 2000,
+}: NoiseEffectProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number | undefined>(undefined);
@@ -28,7 +31,7 @@ export default function NoiseEffect({ onComplete, duration = 2000 }: NoiseEffect
       return () => clearTimeout(timer);
     }
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     // キャンバスサイズを画面全体に設定
@@ -37,7 +40,7 @@ export default function NoiseEffect({ onComplete, duration = 2000 }: NoiseEffect
       canvas.height = window.innerHeight;
     };
     resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener("resize", resizeCanvas);
 
     // ノイズエフェクトのアニメーション
     const drawNoise = () => {
@@ -47,10 +50,10 @@ export default function NoiseEffect({ onComplete, duration = 2000 }: NoiseEffect
       // ランダムなノイズを生成
       for (let i = 0; i < data.length; i += 4) {
         const value = Math.random() * 255;
-        data[i] = value;     // Red
+        data[i] = value; // Red
         data[i + 1] = value; // Green
         data[i + 2] = value; // Blue
-        data[i + 3] = 255;   // Alpha
+        data[i + 3] = 255; // Alpha
       }
 
       ctx.putImageData(imageData, 0, 0);
@@ -65,12 +68,12 @@ export default function NoiseEffect({ onComplete, duration = 2000 }: NoiseEffect
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      
+
       // motionライブラリを使ってフェードアウトアニメーション（0.3秒）
       animate(
         container,
         { opacity: 0 },
-        { duration: 0.3, easing: 'ease-out' }
+        { duration: 0.3, easing: "ease-out" },
       ).finished.then(() => {
         onComplete();
       });
@@ -82,7 +85,7 @@ export default function NoiseEffect({ onComplete, duration = 2000 }: NoiseEffect
         cancelAnimationFrame(animationFrameRef.current);
       }
       clearTimeout(timer);
-      window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener("resize", resizeCanvas);
     };
   }, [onComplete, duration, prefersReducedMotion]);
 
@@ -94,11 +97,7 @@ export default function NoiseEffect({ onComplete, duration = 2000 }: NoiseEffect
       aria-live="polite"
       aria-label="アプリケーション起動中"
     >
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full"
-        aria-hidden="true"
-      />
+      <canvas ref={canvasRef} className="w-full h-full" aria-hidden="true" />
       {/* スクリーンリーダー用のテキスト */}
       <div className="sr-only">
         アプリケーションを起動しています。しばらくお待ちください。

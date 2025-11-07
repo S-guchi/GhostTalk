@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 /**
  * prefers-reduced-motionメディアクエリを監視するカスタムフック
@@ -9,8 +9,8 @@ export function useReducedMotion(): boolean {
 
   useEffect(() => {
     // メディアクエリを作成
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
     // 初期値を設定
     setPrefersReducedMotion(mediaQuery.matches);
 
@@ -20,11 +20,11 @@ export function useReducedMotion(): boolean {
     };
 
     // イベントリスナーを追加
-    mediaQuery.addEventListener('change', handleChange);
+    mediaQuery.addEventListener("change", handleChange);
 
     // クリーンアップ
     return () => {
-      mediaQuery.removeEventListener('change', handleChange);
+      mediaQuery.removeEventListener("change", handleChange);
     };
   }, []);
 

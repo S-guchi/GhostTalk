@@ -1,10 +1,10 @@
-import { streamText } from 'ai';
-import { createOpenAI } from '@ai-sdk/openai';
-import type { Persona } from '@/lib/personas/types';
+import { streamText } from "ai";
+import { createOpenAI } from "@ai-sdk/openai";
+import type { Persona } from "@/lib/personas/types";
 
 // OpenAIプロバイダーを初期化
 const openai = createOpenAI({
-  apiKey: process.env.OPENAI_API_KEY || '',
+  apiKey: process.env.OPENAI_API_KEY || "",
 });
 
 /**
@@ -17,14 +17,14 @@ const openai = createOpenAI({
 export function buildSystemPrompt(
   situation: string,
   personas: Persona[],
-  locale: 'ja' | 'en'
+  locale: "ja" | "en",
 ): string {
   // ロケールに応じたプロンプトテンプレート
   const templates = {
     ja: {
-      intro: 'あなたは複数のハロウィンキャラクターの会話を生成するAIです。',
+      intro: "あなたは複数のハロウィンキャラクターの会話を生成するAIです。",
       situation: `\n\n## シチュエーション\n${situation}`,
-      characters: '\n\n## 登場キャラクター',
+      characters: "\n\n## 登場キャラクター",
       rules: `\n\n## 会話のルール
 1. 各キャラクターは自分の性格と話し方に忠実に会話してください
 2. シチュエーションに基づいた自然な対話を生成してください
@@ -37,9 +37,10 @@ export function buildSystemPrompt(
 各発言を改行で区切って出力してください。`,
     },
     en: {
-      intro: 'You are an AI that generates conversations between multiple Halloween characters.',
+      intro:
+        "You are an AI that generates conversations between multiple Halloween characters.",
       situation: `\n\n## Situation\n${situation}`,
-      characters: '\n\n## Characters',
+      characters: "\n\n## Characters",
       rules: `\n\n## Conversation Rules
 1. Each character must stay true to their personality and speaking style
 2. Generate natural dialogue based on the situation
@@ -62,12 +63,15 @@ Separate each message with a newline.`,
 
   // 各ペルソナの情報を追加
   for (const persona of personas) {
-    const speakingStyle = locale === 'ja' ? persona.speakingStyle : (persona.speakingStyleEn || persona.speakingStyle);
-    
+    const speakingStyle =
+      locale === "ja"
+        ? persona.speakingStyle
+        : persona.speakingStyleEn || persona.speakingStyle;
+
     prompt += `\n\n### ${persona.name} (ID: ${persona.id})`;
-    prompt += `\n- ${locale === 'ja' ? '説明' : 'Description'}: ${persona.description}`;
-    prompt += `\n- ${locale === 'ja' ? '性格' : 'Personality'}: ${persona.personality.join(', ')}`;
-    prompt += `\n- ${locale === 'ja' ? '話し方' : 'Speaking Style'}: ${speakingStyle}`;
+    prompt += `\n- ${locale === "ja" ? "説明" : "Description"}: ${persona.description}`;
+    prompt += `\n- ${locale === "ja" ? "性格" : "Personality"}: ${persona.personality.join(", ")}`;
+    prompt += `\n- ${locale === "ja" ? "話し方" : "Speaking Style"}: ${speakingStyle}`;
   }
 
   prompt += template.rules;
@@ -83,11 +87,12 @@ Separate each message with a newline.`,
  */
 export async function generateConversation(
   systemPrompt: string,
-  locale: 'ja' | 'en'
+  locale: "ja" | "en",
 ) {
-  const userMessage = locale === 'ja' 
-    ? '上記のシチュエーションとキャラクターで会話を始めてください。'
-    : 'Please start the conversation with the above situation and characters.';
+  const userMessage =
+    locale === "ja"
+      ? "上記のシチュエーションとキャラクターで会話を始めてください。"
+      : "Please start the conversation with the above situation and characters.";
 
   try {
     // タイムアウト処理（30秒）
@@ -96,11 +101,11 @@ export async function generateConversation(
 
     // AI会話を生成
     const result = streamText({
-      model: openai('gpt-4-turbo'),
+      model: openai("gpt-4-turbo"),
       system: systemPrompt,
       messages: [
         {
-          role: 'user',
+          role: "user",
           content: userMessage,
         },
       ],
@@ -111,10 +116,10 @@ export async function generateConversation(
     clearTimeout(timeoutId);
     return result.toTextStreamResponse();
   } catch (error) {
-    if (error instanceof Error && error.name === 'AbortError') {
-      throw new Error('AI会話生成がタイムアウトしました');
+    if (error instanceof Error && error.name === "AbortError") {
+      throw new Error("AI会話生成がタイムアウトしました");
     }
-    console.error('AI会話生成エラー:', error);
+    console.error("AI会話生成エラー:", error);
     throw error;
   }
 }
