@@ -7,8 +7,16 @@
     "submitButton": "お化けを呼ぶ",
     "maxLength": "最大500文字"
   },
+  "chat": {
+    "loading": "会話を生成中...",
+    "retry": "もう一度試す",
+    "backToHome": "ホームに戻る"
+  },
   "errors": {
     "generationFailed": "お化けたちが現れませんでした。もう一度お試しください。",
-    "emptyInput": "シチュエーションを入力してください"
+    "emptyInput": "シチュエーションを入力してください",
+    "networkError": "ネットワークエラーが発生しました。接続を確認してください。",
+    "timeout": "タイムアウトしました。もう一度お試しください。",
+    "unknownError": "予期しないエラーが発生しました。"
   }
 }

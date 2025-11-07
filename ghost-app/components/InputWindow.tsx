@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
 import { useState, useEffect, useRef, type FormEvent } from 'react';
 import { animate } from 'motion';
 
@@ -10,7 +9,6 @@ interface InputWindowProps {
 }
 
 export function InputWindow({ onSubmit, isVisible }: InputWindowProps) {
-  const t = useTranslations();
   const [situation, setSituation] = useState('');
   const [error, setError] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -36,13 +34,13 @@ export function InputWindow({ onSubmit, isVisible }: InputWindowProps) {
     // 空文字チェック
     const trimmedSituation = situation.trim();
     if (!trimmedSituation) {
-      setError(t('errors.emptyInput'));
+      setError('シチュエーションを入力してください');
       return;
     }
 
     // 最大文字数チェック
     if (trimmedSituation.length > MAX_LENGTH) {
-      setError(`${t('home.maxLength')}`);
+      setError('最大500文字まで入力できます');
       return;
     }
 

@@ -7,8 +7,16 @@
     "submitButton": "Summon Ghosts",
     "maxLength": "Max 500 characters"
   },
+  "chat": {
+    "loading": "Generating conversation...",
+    "retry": "Try Again",
+    "backToHome": "Back to Home"
+  },
   "errors": {
     "generationFailed": "Failed to summon ghosts. Please try again.",
-    "emptyInput": "Please enter a situation"
+    "emptyInput": "Please enter a situation",
+    "networkError": "A network error occurred. Please check your connection.",
+    "timeout": "Request timed out. Please try again.",
+    "unknownError": "An unexpected error occurred."
   }
 }
