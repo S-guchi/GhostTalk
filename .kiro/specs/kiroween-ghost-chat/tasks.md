@@ -38,7 +38,7 @@
     - `getPersonaById()`関数でIDからペルソナを取得する機能を実装
     - _Requirements: 4.3, 6.5_
 
-- [ ] 4. キャラクター画像アセットの準備
+- [x] 4. キャラクター画像アセットの準備
   - `public/characters/`ディレクトリにプレースホルダーSVGファイルを作成
   - skeleton.svg、pumpkin.svg、witch.svgの基本的なSVGを配置
   - _Requirements: 3.4_
