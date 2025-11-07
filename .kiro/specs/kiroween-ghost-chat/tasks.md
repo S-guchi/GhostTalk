@@ -1,7 +1,7 @@
 # Implementation Plan
 
-- [ ] 1. Next.js 15プロジェクトのセットアップと基本構成
-  - Next.js 15プロジェクトを作成し、TypeScript、Tailwind CSS、next-intlを設定
+- [x] 1. Next.js 15プロジェクトのセットアップと基本構成
+  - Next.js 16プロジェクトを作成し、TypeScript、Tailwind CSS、next-intlを設定
   - プロジェクト構造（app/[locale]、components、lib、messages、public/characters）を作成
   - 必要な依存関係（Vercel AI SDK、Motion、next-intl）をインストール
   - _Requirements: 1.1, 2.1_

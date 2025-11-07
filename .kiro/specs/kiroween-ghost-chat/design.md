@@ -6,7 +6,7 @@ Kiroween Ghost Chatは、Next.js 15（App Router）とVercel AI SDKを使用し�
 
 ### Technology Stack
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **AI Integration**: Vercel AI SDK
 - **Styling**: Tailwind CSS
 - **Animation**: Motion (formerly Framer Motion)
@@ -536,7 +536,7 @@ export type Locale = (typeof locales)[number];
 
 ### Routing
 
-Next.js 15のApp Routerで`[locale]`動的セグメントを使用：
+Next.js 16のApp Routerで`[locale]`動的セグメントを使用：
 - `/ja` - 日本語
 - `/en` - 英語
 - `/` - デフォルトロケール（日本語）にリダイレクト
