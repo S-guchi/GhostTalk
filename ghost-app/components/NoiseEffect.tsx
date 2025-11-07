@@ -5,7 +5,7 @@ import { animate } from 'motion';
 
 interface NoiseEffectProps {
   onComplete: () => void;
-  duration?: number; // デフォルト: 2000ms
+  duration?: number; // デフォルト: 2000ms（要件: 0-2秒）
 }
 
 export default function NoiseEffect({ onComplete, duration = 2000 }: NoiseEffectProps) {
@@ -50,16 +50,17 @@ export default function NoiseEffect({ onComplete, duration = 2000 }: NoiseEffect
     drawNoise();
 
     // 指定時間後にアニメーションを停止してコールバックを実行
+    // 要件: ノイズエフェクトは2秒以内、フェードアウトは0.3秒
     const timer = setTimeout(() => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
       
-      // motionライブラリを使ってフェードアウトアニメーション
+      // motionライブラリを使ってフェードアウトアニメーション（0.3秒）
       animate(
         container,
         { opacity: 0 },
-        { duration: 0.5, easing: 'ease-out' }
+        { duration: 0.3, easing: 'ease-out' }
       ).finished.then(() => {
         onComplete();
       });

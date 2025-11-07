@@ -9,28 +9,37 @@ interface GhostCharacterProps {
   persona: Persona;
   position: { x: number; y: number };
   isActive: boolean; // 現在話しているかどうか
+  delay?: number; // 登場アニメーションの遅延時間（ミリ秒）
 }
 
-export function GhostCharacter({ persona, position, isActive }: GhostCharacterProps) {
+export function GhostCharacter({ persona, position, isActive, delay = 0 }: GhostCharacterProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [imageError, setImageError] = useState(false);
 
   // 登場アニメーション（スケール + フェードイン）
+  // 要件: 各0.3秒間隔で順次登場
   useEffect(() => {
     if (containerRef.current) {
-      animate(
-        containerRef.current,
-        { 
-          opacity: [0, 1],
-          scale: [0.5, 1]
-        },
-        { 
-          duration: 0.5,
-          easing: 'ease-out'
+      // 指定された遅延後にアニメーション開始
+      const timer = setTimeout(() => {
+        if (containerRef.current) {
+          animate(
+            containerRef.current,
+            { 
+              opacity: [0, 1],
+              scale: [0.5, 1.05, 1]
+            },
+            { 
+              duration: 0.5,
+              easing: 'ease-out'
+            }
+          );
         }
-      );
+      }, delay);
+
+      return () => clearTimeout(timer);
     }
-  }, []);
+  }, [delay]);
 
   // isActiveの変化に応じた強調表示アニメーション
   useEffect(() => {

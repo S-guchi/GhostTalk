@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { GhostCharacter } from './GhostCharacter';
 import { SpeechBubble } from './SpeechBubble';
 import type { Persona } from '@/lib/personas/types';
@@ -145,16 +145,26 @@ export function ChatStage({ personas, situation, locale }: ChatStageProps) {
     if (messages.length === 0 || isLoading) return;
 
     // 最初のメッセージを表示
+    // 要件: キャラクター登場後に会話開始（最後のキャラクター登場は0.9秒後）
     if (currentMessageIndex === -1) {
-      setCurrentMessageIndex(0);
-      setActivePersonaId(messages[0].personaId);
-      return;
+      // キャラクター登場完了を待つ（3体 × 0.3秒 + 0.5秒のアニメーション = 1.4秒）
+      const initialDelay = setTimeout(() => {
+        setCurrentMessageIndex(0);
+        setActivePersonaId(messages[0].personaId);
+      }, 1500);
+
+      return () => clearTimeout(initialDelay);
     }
 
     // 次のメッセージがある場合
     if (currentMessageIndex < messages.length - 1) {
-      // 1-2秒の間隔で次のメッセージを表示
-      const delay = 1000 + Math.random() * 1000; // 1-2秒
+      // 要件: 発言間に1-2秒の間隔を設定
+      const currentMsg = messages[currentMessageIndex];
+      // メッセージの長さに応じて間隔を調整（最小1.5秒、最大3秒）
+      const baseDelay = 1500;
+      const lengthDelay = Math.min(currentMsg.message.length * 30, 1500);
+      const delay = baseDelay + lengthDelay;
+      
       const timer = setTimeout(() => {
         const nextIndex = currentMessageIndex + 1;
         setCurrentMessageIndex(nextIndex);
@@ -174,12 +184,14 @@ export function ChatStage({ personas, situation, locale }: ChatStageProps) {
   return (
     <div className="relative w-full h-screen overflow-hidden">
       {/* キャラクターを配置 */}
+      {/* 要件: 各0.3秒間隔で順次登場 */}
       {personas.map((persona, index) => (
         <GhostCharacter
           key={persona.id}
           persona={persona}
           position={characterPositions[index]}
           isActive={activePersonaId === persona.id}
+          delay={index * 300} // 0.3秒間隔
         />
       ))}
 

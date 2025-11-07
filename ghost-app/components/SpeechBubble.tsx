@@ -22,6 +22,7 @@ export function SpeechBubble({
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
   // ポップアップアニメーション
+  // 要件: 吹き出しアニメーションのタイミング最適化
   useEffect(() => {
     if (bubbleRef.current) {
       animate(
@@ -32,8 +33,8 @@ export function SpeechBubble({
           y: [20, -5, 0]
         },
         { 
-          duration: 0.4,
-          easing: 'ease-out'
+          duration: 0.3,
+          easing: [0.34, 1.56, 0.64, 1] // easeOutBack風のイージング
         }
       );
     }
@@ -48,7 +49,8 @@ export function SpeechBubble({
     setIsTypingComplete(false);
 
     // タイピング速度（ミリ秒）
-    const typingSpeed = 50;
+    // 要件: 自然な会話の流れを実現するため、適度な速度に調整
+    const typingSpeed = 40;
 
     const typingInterval = setInterval(() => {
       if (currentIndex < message.length) {

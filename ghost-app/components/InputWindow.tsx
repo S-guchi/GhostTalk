@@ -18,6 +18,7 @@ export function InputWindow({ onSubmit, isVisible }: InputWindowProps) {
   const MAX_LENGTH = 500;
 
   // フェードインアニメーション
+  // 要件: ノイズ完了後（2秒）から0.5秒でフェードイン（2-2.5秒）
   useEffect(() => {
     if (isVisible && containerRef.current) {
       animate(
