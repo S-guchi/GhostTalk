@@ -66,8 +66,8 @@
     - ペルソナの性格（ミステリアスで賢い、魔法的）を反映したビジュアル要素を含める
     - _Requirements: 3.4, 6.2_
 
-- [ ] 6. NoiseEffectコンポーネントの実装
-  - [ ] 6.1 ノイズエフェクトコンポーネントを作成
+- [x] 6. NoiseEffectコンポーネントの実装
+  - [x] 6.1 ノイズエフェクトコンポーネントを作成
     - `components/NoiseEffect.tsx`を作成
     - Canvas APIまたはCSS animationでノイズエフェクトを実装
     - 2秒後にonCompleteコールバックを実行
