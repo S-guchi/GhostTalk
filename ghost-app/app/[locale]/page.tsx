@@ -1,19 +1,63 @@
-import { useTranslations } from 'next-intl';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
+'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useLocale } from 'next-intl';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+import NoiseEffect from '@/components/NoiseEffect';
+import { InputWindow } from '@/components/InputWindow';
+import { selectRandomPersonas } from '@/lib/personas';
+
+/**
+ * メインページコンポーネント
+ * NoiseEffect → InputWindowの順で表示し、シチュエーション送信後にチャット画面へ遷移
+ */
 export default function Home() {
-  const t = useTranslations('common');
+  const router = useRouter();
+  const locale = useLocale();
+  
+  // 表示状態の管理
+  const [showNoise, setShowNoise] = useState(true);
+  const [showInput, setShowInput] = useState(false);
+
+  /**
+   * ノイズエフェクト完了時のハンドラー
+   * InputWindowをフェードイン表示
+   */
+  const handleNoiseComplete = () => {
+    setShowNoise(false);
+    setShowInput(true);
+  };
+
+  /**
+   * シチュエーション送信時のハンドラー
+   * ランダムに3体のペルソナを選択し、チャット画面へ遷移
+   */
+  const handleSubmit = (situation: string) => {
+    // ランダムに3体のペルソナを選択
+    const selectedPersonas = selectRandomPersonas(3);
+    const personaIds = selectedPersonas.map(p => p.id).join(',');
+    
+    // チャット画面へナビゲーション（クエリパラメータで情報を渡す）
+    const params = new URLSearchParams({
+      situation,
+      personas: personaIds,
+    });
+    
+    router.push(`/${locale}/chat?${params.toString()}`);
+  };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+    <div className="relative min-h-screen bg-gradient-to-br from-purple-950 via-black to-orange-950">
+      {/* 言語切り替えボタン */}
       <LanguageSwitcher />
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-center py-32 px-16 bg-white dark:bg-black">
-        <h1 className="text-4xl font-bold text-black dark:text-white">
-          {t('appName')}
-        </h1>
-        <p className="mt-4 text-lg text-zinc-600 dark:text-zinc-400">
-          Welcome to Ghost Chat - Coming Soon
-        </p>
+      
+      {/* ノイズエフェクト（起動演出） */}
+      {showNoise && <NoiseEffect onComplete={handleNoiseComplete} />}
+      
+      {/* 入力ウィンドウ */}
+      <main className="flex min-h-screen items-center justify-center p-4">
+        <InputWindow onSubmit={handleSubmit} isVisible={showInput} />
       </main>
     </div>
   );
