@@ -1,5 +1,14 @@
 {
   "common": {
     "appName": "ゴーストチャット"
+  },
+  "home": {
+    "inputPlaceholder": "シチュエーションを入力してください...",
+    "submitButton": "お化けを呼ぶ",
+    "maxLength": "最大500文字"
+  },
+  "errors": {
+    "generationFailed": "お化けたちが現れませんでした。もう一度お試しください。",
+    "emptyInput": "シチュエーションを入力してください"
   }
 }

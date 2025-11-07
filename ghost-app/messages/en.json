@@ -1,5 +1,14 @@
 {
   "common": {
     "appName": "Ghost Chat"
+  },
+  "home": {
+    "inputPlaceholder": "Enter a situation...",
+    "submitButton": "Summon Ghosts",
+    "maxLength": "Max 500 characters"
+  },
+  "errors": {
+    "generationFailed": "Failed to summon ghosts. Please try again.",
+    "emptyInput": "Please enter a situation"
   }
 }

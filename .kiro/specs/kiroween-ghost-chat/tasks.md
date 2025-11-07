@@ -6,18 +6,18 @@
   - 必要な依存関係（Vercel AI SDK、Motion、next-intl）をインストール
   - _Requirements: 1.1, 2.1_
 
-- [ ] 2. 多言語対応（i18n）の実装
-  - [ ] 2.1 next-intlの設定ファイルを作成
+- [x] 2. 多言語対応（i18n）の実装
+  - [x] 2.1 next-intlの設定ファイルを作成
     - `lib/i18n/config.ts`でロケール設定を定義
     - `lib/i18n/request.ts`でリクエストごとのロケール取得を実装
     - _Requirements: 2.1_
   
-  - [ ] 2.2 翻訳ファイルを作成
+  - [x] 2.2 翻訳ファイルを作成
     - `messages/ja.json`と`messages/en.json`を作成
     - UI要素（入力プレースホルダー、ボタン、エラーメッセージ）の翻訳を追加
     - _Requirements: 2.1_
   
-  - [ ] 2.3 ロケールルーティングを設定
+  - [x] 2.3 ロケールルーティングを設定
     - `app/[locale]/layout.tsx`を作成してnext-intlプロバイダーを設定
     - ミドルウェアでロケール検出とリダイレクトを実装
     - _Requirements: 2.1_
