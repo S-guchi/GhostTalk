@@ -43,46 +43,69 @@
   - skeleton.svg、pumpkin.svg、witch.svgの基本的なSVGを配置
   - _Requirements: 3.4_
 
-- [ ] 5. NoiseEffectコンポーネントの実装
-  - [ ] 5.1 ノイズエフェクトコンポーネントを作成
+- [x] 5. キャラクター画像生成プロンプトの作成
+  - [x] 5.1 プロンプトディレクトリを作成
+    - `docs/image-prompt/`ディレクトリを作成
+    - _Requirements: 3.4_
+  
+  - [x] 5.2 Pumpkinキャラクターの画像生成プロンプトを作成
+    - `docs/image-prompt/pumpkin.md`を作成
+    - かわいいハロウィンスタイルのカボチャキャラクターの詳細な画像生成プロンプトを記述
+    - ペルソナの性格（明るく元気、ポジティブ）を反映したビジュアル要素を含める
+    - _Requirements: 3.4, 6.2_
+  
+  - [x] 5.3 Skeletonキャラクターの画像生成プロンプトを作成
+    - `docs/image-prompt/skeleton.md`を作成
+    - かわいいハロウィンスタイルのスケルトンキャラクターの詳細な画像生成プロンプトを記述
+    - ペルソナの性格（冷静で知的、論理的）を反映したビジュアル要素を含める
+    - _Requirements: 3.4, 6.2_
+  
+  - [x] 5.4 Witchキャラクターの画像生成プロンプトを作成
+    - `docs/image-prompt/witch.md`を作成
+    - かわいいハロウィンスタイルの魔女キャラクターの詳細な画像生成プロンプトを記述
+    - ペルソナの性格（ミステリアスで賢い、魔法的）を反映したビジュアル要素を含める
+    - _Requirements: 3.4, 6.2_
+
+- [ ] 6. NoiseEffectコンポーネントの実装
+  - [ ] 6.1 ノイズエフェクトコンポーネントを作成
     - `components/NoiseEffect.tsx`を作成
     - Canvas APIまたはCSS animationでノイズエフェクトを実装
     - 2秒後にonCompleteコールバックを実行
     - _Requirements: 1.1, 1.2, 1.3_
 
-- [ ] 6. InputWindowコンポーネントの実装
-  - [ ] 6.1 入力ウィンドウコンポーネントを作成
+- [ ] 7. InputWindowコンポーネントの実装
+  - [ ] 7.1 入力ウィンドウコンポーネントを作成
     - `components/InputWindow.tsx`を作成
     - Motionでフェードインアニメーションを実装
     - テキスト入力フィールドと送信ボタンを配置
     - _Requirements: 2.1, 2.2_
   
-  - [ ] 6.2 入力バリデーションを実装
+  - [ ] 7.2 入力バリデーションを実装
     - 最大500文字の入力制限を実装
     - 空文字チェックを実装
     - エラーメッセージ表示機能を追加
     - _Requirements: 2.3, 2.4, 2.5_
 
-- [ ] 7. LanguageSwitcherコンポーネントの実装
+- [ ] 8. LanguageSwitcherコンポーネントの実装
   - `components/LanguageSwitcher.tsx`を作成
   - next-intlのuseRouterを使用してロケール切り替えを実装
   - 日本語/英語のトグルボタンを配置
   - _Requirements: 2.1_
 
-- [ ] 8. メインページ（起動演出 + 入力UI）の実装
-  - [ ] 8.1 メインページコンポーネントを作成
+- [ ] 9. メインページ（起動演出 + 入力UI）の実装
+  - [ ] 9.1 メインページコンポーネントを作成
     - `app/[locale]/page.tsx`を作成
     - NoiseEffect → InputWindowの順で表示する状態管理を実装
     - LanguageSwitcherを配置
     - _Requirements: 1.1, 1.2, 2.1_
   
-  - [ ] 8.2 シチュエーション送信時の処理を実装
+  - [ ] 9.2 シチュエーション送信時の処理を実装
     - ランダムに3体のペルソナを選択
     - チャット画面へのナビゲーションを実装
     - 選択されたペルソナIDとシチュエーションをクエリパラメータまたは状態で渡す
     - _Requirements: 2.4, 3.1, 4.1_
 
-- [ ] 9. GhostCharacterコンポーネントの実装
+- [ ] 10. GhostCharacterコンポーネントの実装
   - `components/GhostCharacter.tsx`を作成
   - Next.js Imageコンポーネントでキャラクター画像を表示
   - Motionで登場アニメーション（スケール + フェードイン）を実装
@@ -90,93 +113,93 @@
   - 画像読み込み失敗時のフォールバック（絵文字アイコン）を実装
   - _Requirements: 3.2, 3.3, 3.4_
 
-- [ ] 10. SpeechBubbleコンポーネントの実装
+- [ ] 11. SpeechBubbleコンポーネントの実装
   - `components/SpeechBubble.tsx`を作成
   - 吹き出しUIをペルソナのカラーに応じてスタイリング
   - タイピングエフェクトで文字を順次表示する機能を実装
   - Motionでポップアップアニメーションを実装
   - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-- [ ] 11. AI会話生成APIの実装
-  - [ ] 11.1 API Routeを作成
+- [ ] 12. AI会話生成APIの実装
+  - [ ] 12.1 API Routeを作成
     - `app/api/ghost-chat/route.ts`を作成
     - リクエストボディから`situation`、`personaIds`、`locale`を取得
     - _Requirements: 4.1, 4.2_
   
-  - [ ] 11.2 システムプロンプト構築ロジックを実装
+  - [ ] 12.2 システムプロンプト構築ロジックを実装
     - `lib/ai/chat-generator.ts`を作成
     - ペルソナIDから実際のペルソナオブジェクトを取得
     - ロケールに応じた話し方（speakingStyleまたはspeakingStyleEn）を使用
     - シチュエーションとペルソナ情報を含むシステムプロンプトを構築
     - _Requirements: 4.2, 4.3_
   
-  - [ ] 11.3 Vercel AI SDKでストリーミング生成を実装
+  - [ ] 12.3 Vercel AI SDKでストリーミング生成を実装
     - `streamText`を使用してAI会話を生成
     - 各発言をJSON形式（personaId、message）で構造化
     - ストリーミングレスポンスを返す
     - _Requirements: 4.1, 4.4, 4.5_
   
-  - [ ] 11.4 エラーハンドリングを実装
+  - [ ] 12.4 エラーハンドリングを実装
     - タイムアウト処理（30秒）を追加
     - エラー時の適切なレスポンスを返す
     - _Requirements: 4.1_
 
-- [ ] 12. ChatStageコンポーネントの実装
-  - [ ] 12.1 チャットステージコンポーネントを作成
+- [ ] 13. ChatStageコンポーネントの実装
+  - [ ] 13.1 チャットステージコンポーネントを作成
     - `components/ChatStage.tsx`を作成
     - 3体のGhostCharacterを配置（位置を計算）
     - _Requirements: 3.1, 3.2, 3.3_
   
-  - [ ] 12.2 AI APIからのストリーミングレスポンス処理を実装
+  - [ ] 13.2 AI APIからのストリーミングレスポンス処理を実装
     - Vercel AI SDKの`useChat`または`useCompletion`を使用
     - ストリーミングで受信したメッセージを順次表示
     - 各メッセージに対応するSpeechBubbleを表示
     - _Requirements: 4.4, 4.5, 5.3, 5.4_
   
-  - [ ] 12.3 会話の表示タイミング制御を実装
+  - [ ] 13.3 会話の表示タイミング制御を実装
     - 発言間に1-2秒の間隔を設定
     - 現在話しているキャラクターをハイライト
     - _Requirements: 5.4_
 
-- [ ] 13. チャット画面ページの実装
+- [ ] 14. チャット画面ページの実装
   - `app/[locale]/chat/page.tsx`を作成
   - クエリパラメータまたは状態からシチュエーションとペルソナIDを取得
   - ChatStageコンポーネントを配置
   - LanguageSwitcherを配置
   - _Requirements: 3.1, 4.1_
 
-- [ ] 14. アニメーション統合とタイミング調整
+- [ ] 15. アニメーション統合とタイミング調整
   - 起動演出のタイミング（ノイズ: 0-2秒、フェードイン: 2-2.5秒）を調整
   - お化け登場アニメーション（各0.3秒間隔）を調整
   - 吹き出しアニメーションのタイミングを調整
   - _Requirements: 1.1, 1.2, 1.3, 3.3, 5.3_
 
-- [ ] 15. エラーハンドリングとユーザーフィードバックの実装
+- [ ] 16. エラーハンドリングとユーザーフィードバックの実装
   - API呼び出し失敗時のエラーメッセージ表示を実装
   - ローディング状態の表示を実装
   - 入力バリデーションエラーの表示を実装
   - _Requirements: 2.3, 2.4_
 
-- [ ] 16. アクセシビリティ対応
+- [ ] 17. アクセシビリティ対応
   - キーボード操作対応を実装
   - ARIA属性を追加
   - prefers-reduced-motionメディアクエリでアニメーション無効化オプションを実装
   - _Requirements: 1.1, 2.1, 3.3, 5.3_
 
-- [ ] 17. レスポンシブデザインの実装
+- [ ] 18. レスポンシブデザインの実装
   - モバイル、タブレット、デスクトップでのレイアウト調整
   - キャラクター配置の画面サイズ対応
   - 吹き出しの位置調整
   - _Requirements: 2.1, 3.2, 5.1_
 
-- [ ]* 18. 追加ペルソナの実装例
-  - [ ]* 18.1 ゴーストペルソナを追加
+- [ ]* 19. 追加ペルソナの実装例
+  - [ ]* 19.1 ゴーストペルソナを追加
     - `lib/personas/ghost.ts`を作成
     - `public/characters/ghost.svg`を追加
     - `lib/personas/index.ts`のallPersonas配列に追加
     - _Requirements: 6.1, 6.2, 6.3, 6.4_
   
-  - [ ]* 18.2 ヴァンパイアペルソナを追加
+  - [ ]* 19.2 ヴァンパイアペルソナを追加
     - `lib/personas/vampire.ts`を作成
     - `public/characters/vampire.svg`を追加
     - `lib/personas/index.ts`のallPersonas配列に追加
