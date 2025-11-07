@@ -120,32 +120,32 @@
   - Motionでポップアップアニメーションを実装
   - _Requirements: 5.1, 5.2, 5.3, 5.4_
 
-- [ ] 12. AI会話生成APIの実装
-  - [ ] 12.1 API Routeを作成
+- [x] 12. AI会話生成APIの実装
+  - [x] 12.1 API Routeを作成
     - `app/api/ghost-chat/route.ts`を作成
     - リクエストボディから`situation`、`personaIds`、`locale`を取得
     - _Requirements: 4.1, 4.2_
   
-  - [ ] 12.2 システムプロンプト構築ロジックを実装
+  - [x] 12.2 システムプロンプト構築ロジックを実装
     - `lib/ai/chat-generator.ts`を作成
     - ペルソナIDから実際のペルソナオブジェクトを取得
     - ロケールに応じた話し方（speakingStyleまたはspeakingStyleEn）を使用
     - シチュエーションとペルソナ情報を含むシステムプロンプトを構築
     - _Requirements: 4.2, 4.3_
   
-  - [ ] 12.3 Vercel AI SDKでストリーミング生成を実装
+  - [x] 12.3 Vercel AI SDKでストリーミング生成を実装
     - `streamText`を使用してAI会話を生成
     - 各発言をJSON形式（personaId、message）で構造化
     - ストリーミングレスポンスを返す
     - _Requirements: 4.1, 4.4, 4.5_
   
-  - [ ] 12.4 エラーハンドリングを実装
+  - [x] 12.4 エラーハンドリングを実装
     - タイムアウト処理（30秒）を追加
     - エラー時の適切なレスポンスを返す
     - _Requirements: 4.1_
 
-- [ ] 13. ChatStageコンポーネントの実装
-  - [ ] 13.1 チャットステージコンポーネントを作成
+- [-] 13. ChatStageコンポーネントの実装
+  - [-] 13.1 チャットステージコンポーネントを作成
     - `components/ChatStage.tsx`を作成
     - 3体のGhostCharacterを配置（位置を計算）
     - _Requirements: 3.1, 3.2, 3.3_
