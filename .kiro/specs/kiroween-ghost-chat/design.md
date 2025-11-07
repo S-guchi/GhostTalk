@@ -2,16 +2,18 @@
 
 ## Overview
 
-Kiroween Ghost Chatは、Next.js 15（App Router）とVercel AI SDKを使用したインタラクティブなハロウィンアプリケーションです。ユーザーが入力したシチュエーションに基づいて、複数のお化けキャラクターがAIによって生成された会話を展開します。日本語と英語の切り替えに対応しています。
+Kiroween Ghost Chatは、Next.js 16（App Router）とVercel AI SDKを使用したインタラクティブなハロウィンアプリケーションです。ユーザーが入力したシチュエーションに基づいて、複数のお化けキャラクター（スケルトン、カボチャ、魔女など）がAIによって生成された会話を自動的に展開します。ユーザーは画面上に現れるお化けたちの会話を眺めて楽しむことができます。日本語と英語の切り替えに対応しています。
 
 ### Technology Stack
 
-- **Framework**: Next.js 16 (App Router)
-- **AI Integration**: Vercel AI SDK
-- **Styling**: Tailwind CSS
-- **Animation**: Motion (formerly Framer Motion)
-- **Language**: TypeScript
-- **Internationalization**: next-intl
+- **Framework**: Next.js 16.0.1 (App Router)
+- **AI Integration**: Vercel AI SDK (ai ^4.0.0)
+- **Styling**: Tailwind CSS 4
+- **Animation**: Motion 10.16.0 (formerly Framer Motion)
+- **Language**: TypeScript 5 (strict mode)
+- **Internationalization**: next-intl (^3.26.5)
+- **Code Quality**: Biome 2.2.0 (linter and formatter)
+- **Runtime**: Node.js 20+
 
 ## Architecture
 
@@ -321,6 +323,8 @@ export function getPersonaById(id: string): Persona | undefined {
 
 ### Skeleton (スケルトン)
 
+**要件対応**: Requirement 6.1, 6.4
+
 ```typescript
 export const skeletonPersona: Persona = {
   id: 'skeleton',
@@ -341,7 +345,11 @@ export const skeletonPersona: Persona = {
 };
 ```
 
+**デザイン判断**: スケルトンは会話を盛り上げる役割として、カジュアルで親しみやすいキャラクターに設定しました。骨に関するダジャレを使うことで、ハロウィンらしいユーモアを表現します。
+
 ### Pumpkin (カボチャ)
+
+**要件対応**: Requirement 6.2, 6.4
 
 ```typescript
 export const pumpkinPersona: Persona = {
@@ -362,6 +370,8 @@ export const pumpkinPersona: Persona = {
   }
 };
 ```
+
+**デザイン判断**: カボチャは明るくポジティブなキャラクターとして、会話に活気を与える役割を担います。感嘆詞を多用することで、エネルギッシュな性格を表現します。
 
 ### Witch (魔女)
 

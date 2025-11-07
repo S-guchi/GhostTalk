@@ -13,7 +13,6 @@ interface ChatMessage {
 interface ChatStageProps {
   personas: Persona[];
   situation: string;
-  locale: 'ja' | 'en';
 }
 
 /**
@@ -59,7 +58,7 @@ function calculateBubblePosition(
   };
 }
 
-export function ChatStage({ personas, situation, locale }: ChatStageProps) {
+export function ChatStage({ personas, situation }: ChatStageProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(true);
@@ -76,6 +75,10 @@ export function ChatStage({ personas, situation, locale }: ChatStageProps) {
         setIsLoading(true);
         setError(null);
 
+        // タイムアウト処理（30秒）
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+
         const response = await fetch('/api/ghost-chat', {
           method: 'POST',
           headers: {
@@ -84,12 +87,22 @@ export function ChatStage({ personas, situation, locale }: ChatStageProps) {
           body: JSON.stringify({
             situation,
             personaIds: personas.map((p) => p.id),
-            locale,
+            locale: 'ja',
           }),
+          signal: controller.signal,
         });
 
+        clearTimeout(timeoutId);
+
         if (!response.ok) {
-          throw new Error('会話の生成に失敗しました');
+          // HTTPステータスコードに応じたエラーメッセージ
+          if (response.status >= 500) {
+            throw new Error('お化けたちが現れませんでした。もう一度お試しください。');
+          }
+          if (response.status === 408 || response.status === 504) {
+            throw new Error('タイムアウトしました。もう一度お試しください。');
+          }
+          throw new Error('お化けたちが現れませんでした。もう一度お試しください。');
         }
 
         // ストリーミングレスポンスを処理
@@ -98,7 +111,7 @@ export function ChatStage({ personas, situation, locale }: ChatStageProps) {
         let buffer = '';
 
         if (!reader) {
-          throw new Error('レスポンスの読み取りに失敗しました');
+          throw new Error('お化けたちが現れませんでした。もう一度お試しください。');
         }
 
         while (true) {
@@ -132,13 +145,26 @@ export function ChatStage({ personas, situation, locale }: ChatStageProps) {
         setIsLoading(false);
       } catch (err) {
         console.error('会話取得エラー:', err);
-        setError(err instanceof Error ? err.message : '不明なエラー');
+        
+        // エラーの種類に応じたメッセージ
+        if (err instanceof Error) {
+          if (err.name === 'AbortError') {
+            setError('タイムアウトしました。もう一度お試しください。');
+          } else if (err.message.includes('fetch')) {
+            setError('ネットワークエラーが発生しました。接続を確認してください。');
+          } else {
+            setError(err.message);
+          }
+        } else {
+          setError('予期しないエラーが発生しました。');
+        }
+        
         setIsLoading(false);
       }
     };
 
     fetchConversation();
-  }, [situation, personas, locale]);
+  }, [situation, personas]);
 
   // メッセージを順次表示する
   useEffect(() => {
@@ -209,21 +235,35 @@ export function ChatStage({ personas, situation, locale }: ChatStageProps) {
 
       {/* ローディング表示 */}
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-white text-xl animate-pulse">
-            {locale === 'ja' ? '会話を生成中...' : 'Generating conversation...'}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-purple-900/80 border-2 border-purple-500 rounded-lg px-8 py-6 text-center">
+            <div className="text-white text-xl mb-4 animate-pulse">
+              会話を生成中...
+            </div>
+            <div className="flex justify-center space-x-2">
+              <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+              <div className="w-3 h-3 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+              <div className="w-3 h-3 bg-orange-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+            </div>
           </div>
         </div>
       )}
 
       {/* エラー表示 */}
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="bg-red-500/20 border-2 border-red-500 rounded-lg px-6 py-4 text-white">
-            <p className="font-bold mb-2">
-              {locale === 'ja' ? 'エラー' : 'Error'}
-            </p>
-            <p>{error}</p>
+        <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-red-900/80 border-2 border-red-500 rounded-lg px-8 py-6 text-white max-w-md">
+            <div className="flex items-center mb-4">
+              <span className="text-3xl mr-3">⚠️</span>
+              <p className="font-bold text-xl">エラー</p>
+            </div>
+            <p className="mb-4">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full py-2 px-4 bg-red-600 hover:bg-red-700 rounded-lg font-bold transition-colors"
+            >
+              もう一度試す
+            </button>
           </div>
         </div>
       )}

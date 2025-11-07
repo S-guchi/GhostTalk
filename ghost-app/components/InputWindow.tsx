@@ -6,9 +6,10 @@ import { animate } from 'motion';
 interface InputWindowProps {
   onSubmit: (situation: string) => void;
   isVisible: boolean;
+  isLoading?: boolean;
 }
 
-export function InputWindow({ onSubmit, isVisible }: InputWindowProps) {
+export function InputWindow({ onSubmit, isVisible, isLoading = false }: InputWindowProps) {
   const [situation, setSituation] = useState('');
   const [error, setError] = useState('');
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,7 +68,7 @@ export function InputWindow({ onSubmit, isVisible }: InputWindowProps) {
     >
       <div className="bg-gradient-to-br from-purple-900/80 to-orange-900/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-purple-500/30">
         <h2 className="text-3xl font-bold text-center mb-6 text-orange-100">
-          {t('common.appName')}
+          ゴーストチャット
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -75,11 +76,11 @@ export function InputWindow({ onSubmit, isVisible }: InputWindowProps) {
             <textarea
               value={situation}
               onChange={(e) => handleInputChange(e.target.value)}
-              placeholder={t('home.inputPlaceholder')}
+              placeholder="シチュエーションを入力してください..."
               maxLength={MAX_LENGTH}
               rows={4}
               className="w-full px-4 py-3 bg-black/30 border border-purple-400/50 rounded-lg text-white placeholder-purple-300/50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none"
-              aria-label={t('home.inputPlaceholder')}
+              aria-label="シチュエーション入力"
               aria-invalid={!!error}
               aria-describedby={error ? 'input-error' : 'char-count'}
             />
@@ -100,14 +101,24 @@ export function InputWindow({ onSubmit, isVisible }: InputWindowProps) {
 
           <button
             type="submit"
-            disabled={!situation.trim()}
+            disabled={!situation.trim() || isLoading}
             className="w-full py-3 px-6 bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 disabled:cursor-not-allowed text-white font-bold rounded-lg shadow-lg transition-all duration-200 transform hover:scale-105 disabled:hover:scale-100"
           >
-            {t('home.submitButton')}
+            {isLoading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                読み込み中...
+              </span>
+            ) : (
+              'お化けを呼ぶ'
+            )}
           </button>
 
           <p className="text-center text-xs text-purple-300/70">
-            {t('home.maxLength')}
+            最大500文字
           </p>
         </form>
       </div>

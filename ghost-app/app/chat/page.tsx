@@ -1,17 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { ChatStage } from '@/components/ChatStage';
 import { getPersonaById } from '@/lib/personas';
 import type { Persona } from '@/lib/personas/types';
 
 /**
- * チャット画面ページ
- * クエリパラメータからシチュエーションとペルソナIDを取得し、
- * ChatStageコンポーネントで会話を表示する
+ * チャット画面の内部コンポーネント
  */
-export default function ChatPage() {
+function ChatPageContent() {
   const searchParams = useSearchParams();
   
   const [personas, setPersonas] = useState<Persona[]>([]);
@@ -61,8 +59,25 @@ export default function ChatPage() {
 
       {/* チャットステージ */}
       {!error && personas.length > 0 && situation && (
-        <ChatStage personas={personas} situation={situation} locale="ja" />
+        <ChatStage personas={personas} situation={situation} />
       )}
     </div>
+  );
+}
+
+/**
+ * チャット画面ページ
+ * クエリパラメータからシチュエーションとペルソナIDを取得し、
+ * ChatStageコンポーネントで会話を表示する
+ */
+export default function ChatPage() {
+  return (
+    <Suspense fallback={
+      <div className="relative min-h-screen bg-gradient-to-br from-purple-950 via-black to-orange-950 flex items-center justify-center">
+        <div className="text-white text-xl animate-pulse">読み込み中...</div>
+      </div>
+    }>
+      <ChatPageContent />
+    </Suspense>
   );
 }
